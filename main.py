@@ -15,11 +15,15 @@ import copy
 import warnings
 import statistics
 from matplotlib.pyplot import figure
+import tensorflow as tf
+from tensorflow import keras
+from sklearn.model_selection import train_test_split
 
 # warnings.simplefilter('error') # treat warnings as errors
 figure(num=None, figsize=(30, 8), dpi=80, facecolor='w', edgecolor='k')
 matplotlib.rc('font', size=24)
 
+## Load the spam data set and Scale the input matrix
 def Parse(fname):
     all_rows = []
     with open(fname) as fp:
@@ -43,3 +47,80 @@ if __name__ == "__main__":
     y = np.array([temp_ar[:, -1]]).T 
     y = y.astype(int)
     num_row = X.shape[0]
+
+## Divide the data into 80% train, 20% test observations (out of all observations in the whole data set).
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
+
+## Next divide the train data into 60% subtrain, 40% validation.
+X_subtrain, X_validation, y_subtrain, y_validation = train_test_split(X, y, test_size=0.4)
+
+## Define three different neural networks
+# for first model
+# setup layers
+model_one = keras.Sequential([
+    keras.layers.Flatten(input_shape=X_subtrain.shape[1]),
+    keras.layers.Dense(10, activation='sigmoid'),
+    keras.layers.Dense(1)
+])
+# compiler model
+model_one.compile(optimizer='adam',
+              loss=tf.keras.losses.categorical_crossentropy(from_logits=True),
+              metrics=['accuracy'])
+
+# for second model
+# setup layers
+model_two = keras.Sequential([
+    keras.layers.Flatten(input_shape=X_subtrain.shape[1]),
+    keras.layers.Dense(100, activation='sigmoid'),
+    keras.layers.Dense(1)
+])
+# compiler model
+model_two.compile(optimizer='adam',
+              loss=tf.keras.losses.categorical_crossentropy(from_logits=True),
+              metrics=['accuracy'])
+
+# for third model
+# setup layers
+model_three = keras.Sequential([
+    keras.layers.Flatten(input_shape=X_subtrain.shape[1]),
+    keras.layers.Dense(1000, activation='sigmoid'),
+    keras.layers.Dense(1)
+])
+# compiler model
+model_three.compile(optimizer='adam',
+              loss=tf.keras.losses.categorical_crossentropy(from_logits=True),
+              metrics=['accuracy'])
+
+
+# feed the model
+model_one.fit(X_subtrain, y_subtrain, validation_data = (X_validation, y_validation), epochs=10)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
