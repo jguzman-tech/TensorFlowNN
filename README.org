@@ -43,9 +43,19 @@ pip3 install -r ./requirements.txt
 To see our help message execute:
 python3 main.py -h
 #+BEGIN_SRC
-TBD
+usage: main.py [-h] max_epochs_one max_epochs_two max_epochs_three
+
+Create three NN models with TensorFlow
+
+positional arguments:
+  max_epochs_one    maximum epochs for the 10 hidden units model
+  max_epochs_two    maximum epochs for the 100 hidden units model
+  max_epochs_three  maximum epochs for the 1000 hidden units model
+
+optional arguments:
+  -h, --help        show this help message and exit
 #+END_SRC
 ** 3. Reproduce our results
 #+BEGIN_SRC
-TBD
+python3 main.py 300 300 300
 #+END_SRC
